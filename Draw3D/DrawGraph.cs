@@ -59,18 +59,14 @@ namespace Draw3D
         {
             int N = Nodes.Count;
             for (int i = 0; i < N; i++)
-                Nodes[i].Edge = new List<Edge>(0);//.Clear();//Array.Resize(ref Nodes[i].Edge, 0);
-            Nodes = new List<Node>(0);//.Clear();//Array.Resize(ref Nodes, 0);
+                Nodes[i].Edge = new List<Edge>(0);//Array.Resize(ref Nodes[i].Edge, 0);
+            Nodes = new List<Node>(0);//Array.Resize(ref Nodes, 0);
         }
 
         public void AddNode(int x, int y) 
         {
-            
             int N = Nodes.Count;
             Nodes.Add(new Node());
-            //Nodes = new List<Node>(++N); //Array.Resize(ref Nodes, ++N);
-            //Nodes[N - 1] = new List <Node>();
-            //Nodes[N - 1] = new Node();//new List<Node>();
             Nodes[N].X = x;
             Nodes[N].Y = y;
         }
@@ -84,10 +80,7 @@ namespace Draw3D
             int L = SelectNodeBeg.Edge.Count; 
             if (SelectNodeBeg.Edge != null)
                 L = SelectNodeBeg.Edge.Count;
-            //Nodes[++L].Edge = new Edge();
-            //SelectNodeBeg.Edge.Add();
-            SelectNodeBeg.Edge = new List<Edge>(++L);//SelectNodeBeg.Edge = new List<Edge>(++L); SelectNodeBeg.Edge.Add(new Edge());// Array.Resize(ref SelectNodeBeg.Edge, ++L);
-            //int k = n;
+            SelectNodeBeg.Edge = new List<Edge>(++L);// Array.Resize(ref SelectNodeBeg.Edge, ++L);
             SelectNodeBeg.Edge[L - 1].numNode = n;
             double a1 = SelectNodeBeg.X;
             double b1 = SelectNodeBeg.Y;
@@ -251,7 +244,7 @@ namespace Draw3D
             int L = Nodes[NumNode].Edge.Count;
             for (int i = NumEdge; i < L - 2; i++)
                 Nodes[NumNode].Edge[i] = Nodes[NumNode].Edge[i + 1];
-            Nodes[NumNode].Edge = new List<Edge>(L - 1);//.Clear();// Array.Resize(ref Nodes[NumNode].Edge, L - 1);
+            Nodes[NumNode].Edge = new List<Edge>(L - 1);// Array.Resize(ref Nodes[NumNode].Edge, L - 1);
         }
     }
 }
