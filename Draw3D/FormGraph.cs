@@ -104,13 +104,7 @@ namespace Draw3D
                         break;
                     case 3:
                         dgr.DeSelectEdge();
-                        int NumLine = -1;
-                        int NumNode = dgr.FindLine(e.X, e.Y, out NumLine);
-                        if (NumNode != -1)
-                        {
-                            Nodes[NumNode].Edge[NumLine].select = true;
-                            MyDraw(false);
-                        }
+                        MyDraw(false);
                         break;
                 }
             }

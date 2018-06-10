@@ -10,7 +10,7 @@ namespace ClassLibrary
     {
         public List<Node> Nodes { get; set; }
 
-        public MyGraph ()
+        public MyGraph()
         {
             this.Nodes = new List<Node>();
         }

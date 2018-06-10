@@ -12,7 +12,8 @@ namespace Draw3D
 {
     public class DrawGraph
     {
-        public List<Node> Nodes = new List<Node>();
+        MyGraph ListN = new MyGraph();
+        public Node Node;
 
         public static Node SelectNode;
         public static Node SelectNodeBeg;
@@ -42,10 +43,10 @@ namespace Draw3D
 
         public void ClearBlock()
         {
-            int N = Nodes.Count;
+            int N = ListN.Nodes.Count;
             for (int i = 0; i <= N - 1; i++)
             {
-                Nodes[i].Visit = false;
+                ListN.Nodes[i].Visit = false;
             }
         }
 
@@ -57,66 +58,69 @@ namespace Draw3D
         
         public void Clear()
         {
-            int N = Nodes.Count;
+            int N = ListN.Nodes.Count;
             for (int i = 0; i < N; i++)
-                Nodes[i].Edge = new List<Edge>(0);//Array.Resize(ref Nodes[i].Edge, 0);
-            Nodes = new List<Node>(0);//Array.Resize(ref Nodes, 0);
+                ListN.Nodes[i].Edge = new List<Edge>(0);
+            ListN.Nodes = new List<Node>(0);
         }
 
         public void AddNode(int x, int y) 
         {
-            int N = Nodes.Count;
-            Nodes.Add(new Node());
-            Nodes[N].X = x;
-            Nodes[N].Y = y;
+            int N = ListN.Nodes.Count;
+            ListN.Nodes.Add(new Node());
+            ListN.Nodes[N].X = x;
+            ListN.Nodes[N].Y = y;
         }
 
         public void AddEdge()
         {
             int n = -1; bool ok = false;
-            int Ln = Nodes.Count;
+            int Ln = ListN.Nodes.Count;
             while ((n < Ln - 1) && !ok)
-                ok = Nodes[++n] == SelectNode;
-            int L = SelectNodeBeg.Edge.Count; 
+                ok = ListN.Nodes[++n] == SelectNode;
+            int L = 0;
             if (SelectNodeBeg.Edge != null)
                 L = SelectNodeBeg.Edge.Count;
-            SelectNodeBeg.Edge = new List<Edge>(++L);// Array.Resize(ref SelectNodeBeg.Edge, ++L);
-            SelectNodeBeg.Edge[L - 1].numNode = n;
+            else
+            {
+                SelectNodeBeg.Edge = new List<Edge>();
+            }
+            SelectNodeBeg.Edge.Add(new Edge { numNode = n });
             double a1 = SelectNodeBeg.X;
             double b1 = SelectNodeBeg.Y;
             double a2 = SelectNode.X;
             double b2 = SelectNode.Y;
 
-            SelectNodeBeg.Edge[L - 1].A = (int)Math.Sqrt((a2 - a1) * (a2 - a1) + (b2 - b1) * (b2 - b1));
-            SelectNodeBeg.Edge[L - 1].x1c = X1 - SelectNodeBeg.X;
-            SelectNodeBeg.Edge[L - 1].x2c = X2 - SelectNode.X;
-            SelectNodeBeg.Edge[L - 1].yc = (SelectNode.Y + SelectNodeBeg.Y) / 2;
+            SelectNodeBeg.Edge[L].A = (int)Math.Sqrt((a2 - a1) * (a2 - a1) + (b2 - b1) * (b2 - b1));
+            SelectNodeBeg.Edge[L].x1c = X1 - SelectNodeBeg.X;
+            SelectNodeBeg.Edge[L].x2c = X2 - SelectNode.X;
+            SelectNodeBeg.Edge[L].yc = (SelectNode.Y + SelectNodeBeg.Y) / 2;
         }
 
         public Node FindNode(int x, int y) // найти узел
         {
-            int N = Nodes.Count;
+            int N = ListN.Nodes.Count;
             int i = -1;
             bool Ok = false;
             while ((i < N - 1) && !Ok)
             {
                 i++;
-                Ok = (Nodes[i].X - hx <= x) && (x <= Nodes[i].X + hx) &&
-                     (Nodes[i].Y - hy <= y) && (y <= Nodes[i].Y + hy);
+                Ok = (ListN.Nodes[i].X - hx <= x) && (x <= ListN.Nodes[i].X + hx) &&
+                     (ListN.Nodes[i].Y - hy <= y) && (y <= ListN.Nodes[i].Y + hy);
             }
-            if (Ok) return Nodes[i]; else return null;
+            if (Ok) return ListN.Nodes[i]; else return null;
         }
 
         public void DeSelectEdge()
         {
-            int N = Nodes.Count;
+            int N = ListN.Nodes.Count;
             for (int i = 0; i < N; i++)
             {
-                if (Nodes[i].Edge != null)
+                if (ListN.Nodes[i].Edge != null)
                 {
-                    int L = Nodes[i].Edge.Count;
+                    int L = ListN.Nodes[i].Edge.Count;
                     for (int j = 0; j < L; j++)
-                        Nodes[i].Edge[j].select = false;
+                        ListN.Nodes[i].Edge[j].select = false;
                 }
             }
         }
@@ -131,26 +135,26 @@ namespace Draw3D
 
                 SolidBrush MyBrush = (SolidBrush)Brushes.White;
                 string s;
-                int N = Nodes.Count;
+                int N = ListN.Nodes.Count;
 
                 //Line
                 for (int i = 0; i < N; i++)
                 {
                     // Edge
-                    if (Nodes[i].Edge != null)
+                    if (ListN.Nodes[i].Edge != null)
                     {
-                        int L = Nodes[i].Edge.Count;
+                        int L = ListN.Nodes[i].Edge.Count;
                         MyBrush.Color = Color.White;
                         for (int j = 0; j < L; j++)
                         {
-                            if (Nodes[i].Edge[j].select)
+                            if (ListN.Nodes[i].Edge[j].select)
                                 MyPen = Pens.Red;
                             else
                                 MyPen = new Pen(Color.Black);
-                            int a1 = Nodes[i].X;
-                            int b1 = Nodes[i].Y;
-                            int a2 = Nodes[Nodes[i].Edge[j].numNode].X;
-                            int b2 = Nodes[Nodes[i].Edge[j].numNode].Y;
+                            int a1 = ListN.Nodes[i].X;
+                            int b1 = ListN.Nodes[i].Y;
+                            int a2 = ListN.Nodes[ListN.Nodes[i].Edge[j].numNode].X;
+                            int b2 = ListN.Nodes[ListN.Nodes[i].Edge[j].numNode].Y;
                             g.DrawLine(MyPen, new Point(a1, b1), new Point(a2, b2));
 
                             double a = Math.Atan2(b2 - b1, a2 - a1);
@@ -162,27 +166,27 @@ namespace Draw3D
                     }
                 }
 
-                // Nodes
+                // ListN.Nodes
                 for (int i = 0; i < N; i++)
                 {
-                    if (Nodes[i] == SelectNode)
+                    if (ListN.Nodes[i] == SelectNode)
                         MyPen = Pens.Black;
                     else
                         MyPen = Pens.Black;
-                    if (Nodes[i].Visit)
+                    if (ListN.Nodes[i].Visit)
                         MyBrush.Color = Color.Silver;
                     else
-                        if (Nodes[i] == SelectNode)
+                        if (ListN.Nodes[i] == SelectNode)
                         MyBrush.Color = Color.CadetBlue;
                     else
                         MyBrush.Color = Color.AliceBlue;
-                    g.FillEllipse(MyBrush, Nodes[i].X - hy, Nodes[i].Y - hy, 2 * hy, 2 * hy);
-                    g.DrawEllipse(MyPen, Nodes[i].X - hy, Nodes[i].Y - hy, 2 * hy, 2 * hy);
+                    g.FillEllipse(MyBrush, ListN.Nodes[i].X - hy, ListN.Nodes[i].Y - hy, 2 * hy, 2 * hy);
+                    g.DrawEllipse(MyPen, ListN.Nodes[i].X - hy, ListN.Nodes[i].Y - hy, 2 * hy, 2 * hy);
                     s = Convert.ToString(i);
                     SizeF size = g.MeasureString(s, MyFont);
                     g.DrawString(s, MyFont, Brushes.Black,
-                    Nodes[i].X - size.Width / 2,
-                    Nodes[i].Y - size.Height / 2);
+                    ListN.Nodes[i].X - size.Width / 2,
+                    ListN.Nodes[i].Y - size.Height / 2);
 
                 }
                 if (fl)
@@ -205,21 +209,21 @@ namespace Draw3D
 
         public int FindLine(int x, int y, out int NumLine)  // найти ребро
         {
-            int L = Nodes.Count;
+            int L = ListN.Nodes.Count;
             bool ok = false; int i = -1; NumLine = -1; int j = -1;
             while ((i < L - 1) && !ok)
             {
                 i++;
-                if (Nodes[i].Edge != null)
+                if (ListN.Nodes[i].Edge != null)
                 {
-                    int L1 = Nodes[i].Edge.Count; j = -1;
+                    int L1 = ListN.Nodes[i].Edge.Count; j = -1;
                     while ((j < L1 - 1) && !ok)
                     {
                         j++;
-                        int a1 = Nodes[i].X;
-                        int b1 = Nodes[i].Y;
-                        int a2 = Nodes[Nodes[i].Edge[j].numNode].X;
-                        int b2 = Nodes[Nodes[i].Edge[j].numNode].Y;
+                        int a1 = ListN.Nodes[i].X;
+                        int b1 = ListN.Nodes[i].Y;
+                        int a2 = ListN.Nodes[ListN.Nodes[i].Edge[j].numNode].X;
+                        int b2 = ListN.Nodes[ListN.Nodes[i].Edge[j].numNode].Y;
                         int u1 = Math.Min(a1, a2);
                         int u2 = Math.Max(a1, a2);
                         int v1 = Math.Min(b1, b2);
@@ -241,10 +245,10 @@ namespace Draw3D
 
         public void DelEdge(int NumNode, int NumEdge)  // удалить ребро
         {
-            int L = Nodes[NumNode].Edge.Count;
+            int L = ListN.Nodes[NumNode].Edge.Count;
             for (int i = NumEdge; i < L - 2; i++)
-                Nodes[NumNode].Edge[i] = Nodes[NumNode].Edge[i + 1];
-            Nodes[NumNode].Edge = new List<Edge>(L - 1);// Array.Resize(ref Nodes[NumNode].Edge, L - 1);
+                ListN.Nodes[NumNode].Edge[i] = ListN.Nodes[NumNode].Edge[i + 1];
+            ListN.Nodes[NumNode].Edge = new List<Edge>(L - 1);
         }
     }
 }
