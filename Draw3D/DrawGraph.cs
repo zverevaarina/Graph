@@ -77,17 +77,11 @@ namespace Draw3D
             int Ln = Nodes.Count;
             while ((n < Ln - 1) && !ok)
                 ok = Nodes[++n] == SelectNode;
-            int L = 0; //SelectNodeBeg.Edge.Count; 
+            int L = SelectNodeBeg.Edge.Count; 
             if (SelectNodeBeg.Edge != null)
                 L = SelectNodeBeg.Edge.Count;
-            else
-            {
-                SelectNodeBeg.Edge = new List<Edge>();
-            }
-
-            L++;
-            //SelectNodeBeg.Edge = new List<Edge>(++L);// Array.Resize(ref SelectNodeBeg.Edge, ++L);
-            SelectNodeBeg.Edge.Add(new Edge{numNode = n});
+            SelectNodeBeg.Edge = new List<Edge>(++L);// Array.Resize(ref SelectNodeBeg.Edge, ++L);
+            SelectNodeBeg.Edge[L - 1].numNode = n;
             double a1 = SelectNodeBeg.X;
             double b1 = SelectNodeBeg.Y;
             double a2 = SelectNode.X;
