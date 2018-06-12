@@ -24,6 +24,8 @@ namespace ClassLibrary
         {
             string result = "";
             string r = "";
+            int len = Nodes.Count;
+            int n1 = n;
             Nodes[n].Visit = true;
             if (n == dest)
                 result = Convert.ToString(n);

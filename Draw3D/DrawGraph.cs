@@ -13,7 +13,6 @@ namespace Draw3D
     public class DrawGraph
     {
         MyGraph ListN = new MyGraph();
-        public Node Node;
 
         public static Node SelectNode;
         public static Node SelectNodeBeg;
