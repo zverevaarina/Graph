@@ -8,12 +8,7 @@ namespace ClassLibrary
 {
     public class MyGraph
     {
-        public List<Node> Nodes { get; set; }
-
-        public MyGraph()
-        {
-            this.Nodes = new List<Node>();
-        }
+        public static List<Node> Nodes = new List<Node>();
 
         public string RouteSearch(int start, int end)
         {
@@ -24,8 +19,7 @@ namespace ClassLibrary
         {
             string result = "";
             string r = "";
-            int len = Nodes.Count;
-            int n1 = n;
+            int n1 = Nodes.Count;
             Nodes[n].Visit = true;
             if (n == dest)
                 result = Convert.ToString(n);
